@@ -164,8 +164,7 @@ kubernetes.io/cluster/<cluster-name> = shared
 - Preview ALB controller
 
 
-<img width="1179" height="955" alt="2048-app" src="https://github.com/user-attachments/assets/57db9433-e715-459d-963e-6080b70ddeaf" />
-
+<img width="994" height="330" alt="alb-cont" src="https://github.com/user-attachments/assets/16ca560a-83cf-4ed5-a32a-59b11bfc926f" />
 
 
 
