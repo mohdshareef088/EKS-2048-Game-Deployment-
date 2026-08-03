@@ -163,6 +163,7 @@ kubernetes.io/cluster/<cluster-name> = shared
 ```bash
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
+
 READY   UP-TO-DATE   AVAILABLE
 2/2     2            2
 ```
@@ -171,7 +172,8 @@ READY   UP-TO-DATE   AVAILABLE
 
 Once the ALB is provisioned Active, the Ingress will show:
 
-<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/c7eff8f5-77ac-498b-992e-46ab7ffa3692" />
+<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/cd24777d-5b43-4d8d-8adf-b626e486196f" />
+
 
 Open it:
 
@@ -181,9 +183,8 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 
 You should see the 2048 game UI.
 
-<img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/a7ae1c01-811b-4f9b-a8f1-5e54f7542e8c" />
+<img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/ac2790ee-392e-459f-9f36-3631d80a101a" />
 
----
 
 ## 🧹 **Cleanup**
 
