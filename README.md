@@ -142,6 +142,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
 <img width="389" height="241" alt="namespaces" src="https://github.com/user-attachments/assets/2516b5af-6565-47d3-95ee-3f79a2fa1c2d" />
 
 
+
 ### ✔ Subnet Tags
 
 Public subnets:
@@ -158,24 +159,13 @@ kubernetes.io/role/internal-elb = 1
 kubernetes.io/cluster/<cluster-name> = shared
 ```
 
-### ✔ Controller Health
 
-```bash
-kubectl get deployment -n kube-system aws-load-balancer-controller
-```
-
-READY   UP-TO-DATE   AVAILABLE
-2/2     2            2
-```
-
-## 🌐 **3. Access the Application**
-
-Once the ALB is provisioned Active, the Ingress will show:
 
 
 ![ALB](images/alb.png)
 
-<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/3cc5efb9-b012-46c9-a94a-f0b7cd4fd85d" />
+<img width="1179" height="955" alt="2048-app" src="https://github.com/user-attachments/assets/57db9433-e715-459d-963e-6080b70ddeaf" />
+
 
 
 
