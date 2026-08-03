@@ -68,18 +68,11 @@ eksctl create fargateprofile \
 
 - manifest
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
-This creates:
-- Namespace: `game-2048`
-- Deployment: `deployment-2048`
-- Service: `service-2048`
-- Ingress: `ingress-2048`
-
-pods.png
-
-
+  
 ## 🔍 **2. Verify Deployment**
 
 ### Pods
+<img width="1338" height="586" alt="pods" src="https://github.com/user-attachments/assets/4b8264a8-a707-4c8d-8b48-18d507c12f08" />
 
 ```bash
 kubectl get pods -n game-2048
