@@ -172,8 +172,8 @@ READY   UP-TO-DATE   AVAILABLE
 
 Once the ALB is provisioned Active, the Ingress will show:
 
+<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/1c7bdff3-8ffb-4427-81be-94694e6dbec6" />
 
-<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/cd24777d-5b43-4d8d-8adf-b626e486196f" />
 
 
 Open it:
