@@ -185,7 +185,7 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 You should see the 2048 game UI.
 
 
-![2048](2048.png)
+(https://github.com/mohdshareef088/images/blob/main/2048.png)
 
 
 
