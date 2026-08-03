@@ -46,10 +46,7 @@ tar -xzf eksctl_${PLATFORM}.tar.gz
 sudo mv eksctl /usr/local/bin/
 eksctl version
 
-  
-- AWS Load Balancer Controller installed  
 - IAM role + policy  
-- Public/private subnets tagged correctly
 - Helm
 - Application Load Balancer    
 
@@ -100,33 +97,49 @@ ingress-2048   alb     *                 80      2m
 <img width="542" height="47" alt="ingress" src="https://github.com/user-attachments/assets/2da72f17-69b3-4416-8d7c-9933fbe876a2" />
 
 ---
-
-## 🌐 **3. Access the Application**
-
-Once the ALB is provisioned Active, the Ingress will show:
-<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/c7eff8f5-77ac-498b-992e-46ab7ffa3692" />
-
-Open it:
-
-```
-http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
-```
-
-You should see the 2048 game UI.
-<img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/a7ae1c01-811b-4f9b-a8f1-5e54f7542e8c" />
-
-
 ## 🔧 **4. AWS Load Balancer Controller Requirements**
 
 ### ✔ IAM Policy
 
-Attach the official AWS policy:
+- Attach the official AWS policy:
 
-```bash
-aws iam attach-role-policy \
-  --role-name AmazonEKSLoadBalancerControllerRole \
-  --policy-arn arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy
-```
+IAM OIDC provider
+eksctl utils associate-iam-oidc-provider --cluster demo-testing-cluster --approve
+
+
+- Download IAM policy
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
+
+- Create IAM Policy - to access the alb-controller thru pods
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json
+
+- Create IAM Role
+eksctl create iamserviceaccount   --cluster=demo-testing-cluster   --namespace=kube-system   --name=aws-load-balancer-controller   --role-name AmazonEKSLoadBalancerControllerRole   --attach-policy-arn=arn:aws:iam::140447104913:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
+
+<img width="1244" height="735" alt="sa" src="https://github.com/user-attachments/assets/100d2237-902b-4b38-87fc-b42873e710f1" />
+
+- Deploy ALB controller
+Install Helm to create ALB Controller
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+
+- Add helm repo
+helm repo add eks https://aws.github.io/eks-charts
+Update the repo
+helm repo update eks
+
+- Helm Install
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system \
+  --set clusterName=demo-testing-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region= ap-south-1 \
+  --set vpcId=vpc-012779105586dbdd3
+<img width="389" height="241" alt="namespaces" src="https://github.com/user-attachments/assets/2516b5af-6565-47d3-95ee-3f79a2fa1c2d" />
+
 
 ### ✔ Subnet Tags
 
@@ -158,6 +171,24 @@ READY   UP-TO-DATE   AVAILABLE
 ```
 
 ---
+
+
+## 🌐 **3. Access the Application**
+
+Once the ALB is provisioned Active, the Ingress will show:
+<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/c7eff8f5-77ac-498b-992e-46ab7ffa3692" />
+
+Open it:
+
+```
+http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
+```
+
+You should see the 2048 game UI.
+<img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/a7ae1c01-811b-4f9b-a8f1-5e54f7542e8c" />
+
+
+
 
 ## 🧩 **5. Common Interview Talking Points**
 
