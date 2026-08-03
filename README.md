@@ -159,7 +159,7 @@ kubernetes.io/role/internal-elb = 1
 kubernetes.io/cluster/<cluster-name> = shared
 ```
 
-
+Public subnets host internet‑facing ALBs, while private subnets host internal ALBs. The AWS Load Balancer Controller uses subnet tags to automatically discover which subnets are eligible for ALB creation. Even for public applications, worker nodes usually run in private subnets, so the ALB sits in public subnets and forwards traffic internally. Without correct subnet tags, the controller cannot create the ALB.
 
 - Preview ALB controller
 
