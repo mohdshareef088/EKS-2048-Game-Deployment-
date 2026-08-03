@@ -162,16 +162,9 @@ kubernetes.io/cluster/<cluster-name> = shared
 ```bash
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
-
-Expected:
-
-```
 READY   UP-TO-DATE   AVAILABLE
 2/2     2            2
 ```
-
----
-
 
 ## 🌐 **3. Access the Application**
 
@@ -187,92 +180,13 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 You should see the 2048 game UI.
 <img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/a7ae1c01-811b-4f9b-a8f1-5e54f7542e8c" />
 
-
-
-
-## 🧩 **5. Common Interview Talking Points**
-
-Use these during interviews:
-
-### **Why ALB instead of NLB?**
-ALB supports HTTP/HTTPS, path‑based routing, host‑based routing, and is ideal for web apps.
-
-### **Why do we need AWS Load Balancer Controller?**
-Because Kubernetes Ingress alone cannot create AWS ALBs.  
-The controller translates Ingress → AWS API calls.
-
-### **Why does Fargate show multiple nodes?**
-Each Fargate pod runs in its own isolated environment, represented as a virtual node.
-
-### **Why does Ingress ADDRESS stay empty?**
-Missing IAM permissions, wrong service account, or untagged subnets.
-
-### **What did you learn?**
-IAM roles, OIDC, Helm charts, Kubernetes networking, ALB provisioning, troubleshooting.
-
----
-
-## 🛑 **Troubleshooting Guide**
-
-### ❌ Ingress ADDRESS is empty  
-Check events:
-
-```bash
-kubectl describe ingress ingress-2048 -n game-2048
-```
-
-### ❌ ALB not created  
-Check controller logs:
-
-```bash
-kubectl logs -n kube-system deployment/aws-load-balancer-controller
-```
-
-### ❌ Controller pods stuck at 0/2  
-Fix service account + IAM role mismatch.
-
-### ❌ Webhook errors  
-Ensure the controller is installed correctly via Helm.
-
 ---
 
 ## 🧹 **Cleanup**
 
-Delete the app:
-
-```bash
-kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
-```
-
-Delete the ALB:
-
-```bash
-aws elbv2 delete-load-balancer --load-balancer-arn <arn>
-```
-
 Delete the EKS cluster:
 
 ```bash
-eksctl delete cluster --name <cluster-name> --region <region>
+eksctl delete cluster --name demo-testing-cluster --region ap-south-1
 ```
 
----
-
-## 📚 **References**
-
-- AWS Load Balancer Controller  
-- EKS Documentation  
-- Kubernetes Ingress  
-- 2048 Demo App  
-
----
-
-Mohammed, if you want, I can also:
-
-- Add a **diagram section**  
-- Add **badges** (AWS, Kubernetes, Helm, Terraform)  
-- Add a **project summary for your CV**  
-- Add a **step-by-step installation guide**  
-- Add a **professional architecture diagram**  
-
-Just tell me and I’ll upgrade this README even further.
