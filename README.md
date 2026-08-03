@@ -76,14 +76,17 @@ aws eks update-kubeconfig --name demo-testing-cluster --region ap-south-1
 
 ### Pods
 <img width="1338" height="586" alt="pods" src="https://github.com/user-attachments/assets/4b8264a8-a707-4c8d-8b48-18d507c12f08" />
+
 ```bash
 kubectl get pods -n game-2048
 ```
 ### Service
+
 ```bash
 kubectl get svc -n game-2048
 ```
 ### Ingress
+
 ```bash
 kubectl get ingress -n game-2048
 ```
@@ -94,16 +97,14 @@ Expected:
 NAME           CLASS   HOSTS   ADDRESS   PORTS   AGE
 ingress-2048   alb     *                 80      2m
 ```
+<img width="542" height="47" alt="ingress" src="https://github.com/user-attachments/assets/2da72f17-69b3-4416-8d7c-9933fbe876a2" />
 
 ---
 
 ## 🌐 **3. Access the Application**
 
-Once the ALB is provisioned, the Ingress will show:
-
-```
-ADDRESS   k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
-```
+Once the ALB is provisioned Active, the Ingress will show:
+<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/c7eff8f5-77ac-498b-992e-46ab7ffa3692" />
 
 Open it:
 
@@ -112,8 +113,8 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 ```
 
 You should see the 2048 game UI.
+<img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/a7ae1c01-811b-4f9b-a8f1-5e54f7542e8c" />
 
----
 
 ## 🔧 **4. AWS Load Balancer Controller Requirements**
 
