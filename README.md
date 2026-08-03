@@ -173,7 +173,7 @@ READY   UP-TO-DATE   AVAILABLE
 Once the ALB is provisioned Active, the Ingress will show:
 
 
-![ALB](alb.png)
+![ALB](images/alb.png)
 
 
 Open it:
@@ -185,7 +185,7 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 You should see the 2048 game UI.
 
 
-(https://github.com/mohdshareef088/images/blob/main/2048.png)
+![2048](images/2048.png)
 
 
 
