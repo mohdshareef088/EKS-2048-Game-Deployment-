@@ -1,114 +1,265 @@
-# EKS-Cluster-Deploy-for-Game-app
-
-# 🛠️  Installation & Configurations
-## 📦 Step 1: Create EKS Cluster
-
-### Prerequisites
-- Download and Install AWS Cli - Please Refer [this]("https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html") link.
-- Setup and configure AWS CLI using the `aws configure` command.
-- Install and configure eksctl using the steps mentioned [here]("https://eksctl.io/installation/").
-- Install and configure kubectl as mentioned [here]("https://kubernetes.io/docs/tasks/tools/").
 
 
-```bash
-eksctl create cluster --name=observability \
-                      --region=us-east-1 \
-                      --zones=us-east-1a,us-east-1b \
-                      --without-nodegroup
+# 📘 **Amazon EKS 2048 Game Deployment using AWS Load Balancer Controller**
+
+This project demonstrates how to deploy a containerized web application (the classic **2048 game**) on **Amazon EKS**, expose it using **Kubernetes Ingress**, and automatically provision an **AWS Application Load Balancer (ALB)** using the **AWS Load Balancer Controller**.
+
+It is a complete, real‑world example of how modern cloud‑native applications are deployed on Kubernetes in AWS.
+
+---
+
+## 🎯 **Project Goals**
+
+- Deploy a sample application on EKS  
+- Use Fargate or EC2 worker nodes  
+- Install and configure AWS Load Balancer Controller  
+- Create an Ingress resource that provisions an ALB  
+- Understand IAM roles, policies, OIDC, and subnet tagging  
+- Access the application through a public ALB endpoint  
+- Troubleshoot ALB provisioning issues  
+
+This project is ideal for DevOps interviews, cloud engineering portfolios, and hands‑on Kubernetes learning.
+
+---
+
+## 🏗️ **Architecture Overview**
+
+**Components:**
+
+- **Amazon EKS Cluster**  
+- **AWS Load Balancer Controller** (Helm)  
+- **IAM Role + Policy** for ALB controller  
+- **Fargate Profile** (optional)  
+- **2048 Deployment** (5 replicas)  
+- **Kubernetes Service** (NodePort)  
+- **Ingress** with `alb` ingress class  
+- **AWS Application Load Balancer** (internet-facing)
+
+**Flow:**
+
+1. You deploy the 2048 app using a Kubernetes manifest.  
+2. The Ingress resource triggers the AWS Load Balancer Controller.  
+3. The controller creates an ALB in your VPC.  
+4. The ALB forwards traffic to your Kubernetes pods.  
+5. You access the game through the ALB DNS name.
+
+---
+
+## 📦 **Repository Structure**
+
 ```
-```bash
-eksctl utils associate-iam-oidc-provider \
-    --region us-east-1 \
-    --cluster observability \
-    --approve
-```
-```bash
-eksctl create nodegroup --cluster=observability \
-                        --region=us-east-1 \
-                        --name=observability-ng-private \
-                        --node-type=t3.medium \
-                        --nodes-min=2 \
-                        --nodes-max=3 \
-                        --node-volume-size=20 \
-                        --managed \
-                        --asg-access \
-                        --external-dns-access \
-                        --full-ecr-access \
-                        --appmesh-access \
-                        --alb-ingress-access \
-                        --node-private-networking
-
-# Update ./kube/config file
-aws eks update-kubeconfig --name observability
-```
-
-### 🧰 Step 2: Install kube-prometheus-stack
-```bash
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-```
-
-### 🚀 Step 3: Deploy the chart into a new namespace "monitoring"
-```bash
-kubectl create ns monitoring
-```
-```bash
-cd day-2
-
-helm install monitoring prometheus-community/kube-prometheus-stack \
--n monitoring \
--f ./custom_kube_prometheus_stack.yml
+.
+├── README.md
+└── 2048_full.yaml   # Official manifest from AWS
 ```
 
-### ✅ Step 4: Verify the Installation
+---
+
+## 🛠️ **Prerequisites**
+
+Before deploying, ensure you have:
+
+- AWS CLI  
+- kubectl  
+- eksctl  
+- Helm  
+- An active EKS cluster  
+- AWS Load Balancer Controller installed  
+- Correct IAM role + policy  
+- Public/private subnets tagged correctly  
+
+---
+
+## 🚀 **1. Deploy the 2048 Game**
+
+Apply the official manifest:
+
 ```bash
-kubectl get all -n monitoring
-```
-- **Prometheus UI**:
-```bash
-kubectl port-forward service/prometheus-operated -n monitoring 9090:9090
-```
-
-**NOTE:** If you are using an EC2 Instance or Cloud VM, you need to pass `--address 0.0.0.0` to the above command. Then you can access the UI on <instance-ip:port>
-
-- **Grafana UI**:
-  - **Default Credentials**:
-    - **Username**: `admin`
-    - **Password**: `prom-operator` (explicitly configured in `custom_kube_prometheus_stack.yml`)
-
-
-  **Retrieving Auto-Generated/Actual Credentials:**
-  If you did not use the custom configuration file, or if the credentials don't work, retrieve them directly from the Kubernetes secret:
-  
-  *Get username:*
-  ```bash
-  kubectl get secret --namespace monitoring monitoring-grafana -o jsonpath='{.data.admin-user}' | base64 -d
-  ```
-  
-  *Get password:*
-  ```bash
-  kubectl get secret --namespace monitoring monitoring-grafana -o jsonpath='{.data.admin-password}' | base64 -d
-  ```
-
-  **Port-forwarding to access Grafana UI:**
-  ```bash
-  kubectl port-forward service/monitoring-grafana -n monitoring 8080:80
-  ```
-- **Alertmanager UI**:
-```bash
-kubectl port-forward service/alertmanager-operated -n monitoring 9093:9093
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
 ```
 
-### 🧼 Step 5: Clean UP
-- **Uninstall helm chart**:
+This creates:
+
+- Namespace: `game-2048`
+- Deployment: `deployment-2048`
+- Service: `service-2048`
+- Ingress: `ingress-2048`
+
+---
+
+## 🔍 **2. Verify Deployment**
+
+### Pods
+
 ```bash
-helm uninstall monitoring --namespace monitoring
+kubectl get pods -n game-2048
 ```
-- **Delete namespace**:
+
+### Service
+
 ```bash
-kubectl delete ns monitoring
+kubectl get svc -n game-2048
 ```
-- **Delete Cluster & everything else**:
+
+### Ingress
+
 ```bash
-eksctl delete cluster --name observability
+kubectl get ingress -n game-2048
 ```
+
+Expected:
+
+```
+NAME           CLASS   HOSTS   ADDRESS   PORTS   AGE
+ingress-2048   alb     *                 80      2m
+```
+
+---
+
+## 🌐 **3. Access the Application**
+
+Once the ALB is provisioned, the Ingress will show:
+
+```
+ADDRESS   k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
+```
+
+Open it:
+
+```
+http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
+```
+
+You should see the 2048 game UI.
+
+---
+
+## 🔧 **4. AWS Load Balancer Controller Requirements**
+
+### ✔ IAM Policy
+
+Attach the official AWS policy:
+
+```bash
+aws iam attach-role-policy \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --policy-arn arn:aws:iam::<account-id>:policy/AWSLoadBalancerControllerIAMPolicy
+```
+
+### ✔ Subnet Tags
+
+Public subnets:
+
+```
+kubernetes.io/role/elb = 1
+kubernetes.io/cluster/<cluster-name> = shared
+```
+
+Private subnets:
+
+```
+kubernetes.io/role/internal-elb = 1
+kubernetes.io/cluster/<cluster-name> = shared
+```
+
+### ✔ Controller Health
+
+```bash
+kubectl get deployment -n kube-system aws-load-balancer-controller
+```
+
+Expected:
+
+```
+READY   UP-TO-DATE   AVAILABLE
+2/2     2            2
+```
+
+---
+
+## 🧩 **5. Common Interview Talking Points**
+
+Use these during interviews:
+
+### **Why ALB instead of NLB?**
+ALB supports HTTP/HTTPS, path‑based routing, host‑based routing, and is ideal for web apps.
+
+### **Why do we need AWS Load Balancer Controller?**
+Because Kubernetes Ingress alone cannot create AWS ALBs.  
+The controller translates Ingress → AWS API calls.
+
+### **Why does Fargate show multiple nodes?**
+Each Fargate pod runs in its own isolated environment, represented as a virtual node.
+
+### **Why does Ingress ADDRESS stay empty?**
+Missing IAM permissions, wrong service account, or untagged subnets.
+
+### **What did you learn?**
+IAM roles, OIDC, Helm charts, Kubernetes networking, ALB provisioning, troubleshooting.
+
+---
+
+## 🛑 **Troubleshooting Guide**
+
+### ❌ Ingress ADDRESS is empty  
+Check events:
+
+```bash
+kubectl describe ingress ingress-2048 -n game-2048
+```
+
+### ❌ ALB not created  
+Check controller logs:
+
+```bash
+kubectl logs -n kube-system deployment/aws-load-balancer-controller
+```
+
+### ❌ Controller pods stuck at 0/2  
+Fix service account + IAM role mismatch.
+
+### ❌ Webhook errors  
+Ensure the controller is installed correctly via Helm.
+
+---
+
+## 🧹 **Cleanup**
+
+Delete the app:
+
+```bash
+kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
+```
+
+Delete the ALB:
+
+```bash
+aws elbv2 delete-load-balancer --load-balancer-arn <arn>
+```
+
+Delete the EKS cluster:
+
+```bash
+eksctl delete cluster --name <cluster-name> --region <region>
+```
+
+---
+
+## 📚 **References**
+
+- AWS Load Balancer Controller  
+- EKS Documentation  
+- Kubernetes Ingress  
+- 2048 Demo App  
+
+---
+
+Mohammed, if you want, I can also:
+
+- Add a **diagram section**  
+- Add **badges** (AWS, Kubernetes, Helm, Terraform)  
+- Add a **project summary for your CV**  
+- Add a **step-by-step installation guide**  
+- Add a **professional architecture diagram**  
+
+Just tell me and I’ll upgrade this README even further.
