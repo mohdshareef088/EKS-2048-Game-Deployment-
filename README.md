@@ -172,7 +172,8 @@ READY   UP-TO-DATE   AVAILABLE
 
 Once the ALB is provisioned Active, the Ingress will show:
 
-<img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/1c7bdff3-8ffb-4427-81be-94694e6dbec6" />
+
+
 
 
 
@@ -185,7 +186,6 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 You should see the 2048 game UI.
 
 
-<img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/ac2790ee-392e-459f-9f36-3631d80a101a" />
 
 
 ## 🧹 **Cleanup**
