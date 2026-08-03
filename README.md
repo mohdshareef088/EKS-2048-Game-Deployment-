@@ -74,7 +74,7 @@ This creates:
 - Service: `service-2048`
 - Ingress: `ingress-2048`
 
-<img width="1338" height="586" alt="image" src="https://github.com/user-attachments/assets/be5a25a9-8937-4279-ac99-52a07a8588cb" />
+pods.png
 
 
 ## 🔍 **2. Verify Deployment**
