@@ -161,8 +161,8 @@ kubernetes.io/cluster/<cluster-name> = shared
 
 
 
+- Preview ALB controller
 
-![ALB](images/alb.png)
 
 <img width="1179" height="955" alt="2048-app" src="https://github.com/user-attachments/assets/57db9433-e715-459d-963e-6080b70ddeaf" />
 
@@ -172,7 +172,7 @@ kubernetes.io/cluster/<cluster-name> = shared
 You should see the 2048 game UI.
 
 
-![2048](images/2048.png)
+
 
 <img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/d98f50f1-de77-49e4-bddf-3a60af5a258c" />
 
