@@ -68,24 +68,22 @@ eksctl create fargateprofile \
 
 - manifest
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
+- config file
   
+aws eks update-kubeconfig --name demo-testing-cluster --region ap-south-1 
+
 ## 🔍 **2. Verify Deployment**
 
 ### Pods
 <img width="1338" height="586" alt="pods" src="https://github.com/user-attachments/assets/4b8264a8-a707-4c8d-8b48-18d507c12f08" />
-
 ```bash
 kubectl get pods -n game-2048
 ```
-
 ### Service
-
 ```bash
 kubectl get svc -n game-2048
 ```
-
 ### Ingress
-
 ```bash
 kubectl get ingress -n game-2048
 ```
