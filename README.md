@@ -3,23 +3,6 @@
 # 📘 **Amazon EKS 2048 Game Deployment using AWS Load Balancer Controller**
 
 This project demonstrates how to deploy a containerized web application (the classic **2048 game**) on **Amazon EKS**, expose it using **Kubernetes Ingress**, and automatically provision an **AWS Application Load Balancer (ALB)** using the **AWS Load Balancer Controller**.
-
-It is a complete, real‑world example of how modern cloud‑native applications are deployed on Kubernetes in AWS.
-
----
-
-## 🎯 **Project Goals**
-
-- Deploy a sample application on EKS  
-- Use Fargate or EC2 worker nodes  
-- Install and configure AWS Load Balancer Controller  
-- Create an Ingress resource that provisions an ALB  
-- Understand IAM roles, policies, OIDC, and subnet tagging  
-- Access the application through a public ALB endpoint  
-- Troubleshoot ALB provisioning issues  
-
-This project is ideal for DevOps interviews, cloud engineering portfolios, and hands‑on Kubernetes learning.
-
 ---
 
 ## 🏗️ **Architecture Overview**
@@ -29,31 +12,12 @@ This project is ideal for DevOps interviews, cloud engineering portfolios, and h
 - **Amazon EKS Cluster**  
 - **AWS Load Balancer Controller** (Helm)  
 - **IAM Role + Policy** for ALB controller  
-- **Fargate Profile** (optional)  
+- **Fargate Profile** 
 - **2048 Deployment** (5 replicas)  
 - **Kubernetes Service** (NodePort)  
 - **Ingress** with `alb` ingress class  
 - **AWS Application Load Balancer** (internet-facing)
 
-**Flow:**
-
-1. You deploy the 2048 app using a Kubernetes manifest.  
-2. The Ingress resource triggers the AWS Load Balancer Controller.  
-3. The controller creates an ALB in your VPC.  
-4. The ALB forwards traffic to your Kubernetes pods.  
-5. You access the game through the ALB DNS name.
-
----
-
-## 📦 **Repository Structure**
-
-```
-.
-├── README.md
-└── 2048_full.yaml   # Official manifest from AWS
-```
-
----
 
 ## 🛠️ **Prerequisites**
 
@@ -62,11 +26,12 @@ Before deploying, ensure you have:
 - AWS CLI  
 - kubectl  
 - eksctl  
-- Helm  
-- An active EKS cluster  
+- Active EKS cluster  
 - AWS Load Balancer Controller installed  
-- Correct IAM role + policy  
-- Public/private subnets tagged correctly  
+- IAM role + policy  
+- Public/private subnets tagged correctly
+- Helm
+- Application Load Balancer    
 
 ---
 
