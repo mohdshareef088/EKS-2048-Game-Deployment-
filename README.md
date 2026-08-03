@@ -138,6 +138,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
   --set serviceAccount.name=aws-load-balancer-controller \
   --set region= ap-south-1 \
   --set vpcId=vpc-012779105586dbdd3
+  
 <img width="389" height="241" alt="namespaces" src="https://github.com/user-attachments/assets/2516b5af-6565-47d3-95ee-3f79a2fa1c2d" />
 
 
@@ -169,6 +170,7 @@ READY   UP-TO-DATE   AVAILABLE
 ## 🌐 **3. Access the Application**
 
 Once the ALB is provisioned Active, the Ingress will show:
+
 <img width="994" height="330" alt="alb" src="https://github.com/user-attachments/assets/c7eff8f5-77ac-498b-992e-46ab7ffa3692" />
 
 Open it:
@@ -178,6 +180,7 @@ http://k8s-ingress-xxxx.ap-south-1.elb.amazonaws.com
 ```
 
 You should see the 2048 game UI.
+
 <img width="1179" height="955" alt="2048" src="https://github.com/user-attachments/assets/a7ae1c01-811b-4f9b-a8f1-5e54f7542e8c" />
 
 ---
