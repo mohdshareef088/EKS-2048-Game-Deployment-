@@ -23,10 +23,30 @@ This project demonstrates how to deploy a containerized web application (the cla
 
 Before deploying, ensure you have:
 
-- AWS CLI  
-- kubectl  
-- eksctl  
-- Active EKS cluster  
+- AWS CLI
+sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip
+unzip awscliv2.zip
+sudo ./aws/install
+aws configure
+
+- kubectl
+From <https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/> 
+sudo rm -f /usr/local/bin/kubectl
+curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+- eksctl
+PLATFORM=$(uname -s)_amd64
+curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_${PLATFORM}.tar.gz"
+curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt"
+grep ${PLATFORM}.tar.gz eksctl_checksums.txt | sha256sum --check
+tar -xzf eksctl_${PLATFORM}.tar.gz
+sudo mv eksctl /usr/local/bin/
+eksctl version
+
+  
 - AWS Load Balancer Controller installed  
 - IAM role + policy  
 - Public/private subnets tagged correctly
@@ -37,20 +57,25 @@ Before deploying, ensure you have:
 
 ## 🚀 **1. Deploy the 2048 Game**
 
-Apply the official manifest:
+- Active EKS cluster
+  eksctl create cluster --name demo-testing-cluster --region ap-south-1 --fargate
+- fargate profile & namespace
+eksctl create fargateprofile \
+    --cluster demo-testing-cluster \
+    --region ap-south-1 \
+    --name alb-sample-app \
+    --namespace game-2048
 
-```bash
+- manifest
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
-```
-
 This creates:
-
 - Namespace: `game-2048`
 - Deployment: `deployment-2048`
 - Service: `service-2048`
 - Ingress: `ingress-2048`
 
----
+<img width="1338" height="586" alt="image" src="https://github.com/user-attachments/assets/be5a25a9-8937-4279-ac99-52a07a8588cb" />
+
 
 ## 🔍 **2. Verify Deployment**
 
